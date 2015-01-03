@@ -198,8 +198,8 @@ public class Autentication
 					                                .tenant(Bob).build());
 
 					// Associate the Member role to the Alice Doe
-					Role memberRole = os.identity().roles().getByName("Member");
-					os.identity().roles().addUserRole(Bob.getId(), Alice.getId(), memberRole.getId());
+					Role memberRole = os.identity().roles().create("pasticciere");
+					ActionResponse prova = os.identity().roles().addUserRole(Bob.getId(), Alice.getId(), memberRole.getId());
 					
 					os.identity().users().enableUser(Alice.getId(), true);
 					
@@ -243,7 +243,7 @@ public class Autentication
 							System.out.println("\nPassword cambiata\n");
 							break;
 						case 4://CANCELLARE RUOLO non funziona ricollegarci al metodo superiore (tenant)
-							Role role = os.identity().roles().getByName(john.getName());
+							Role role = os.identity().roles().getByName("pasticciere");
 							os.identity().roles().delete(role.getId()); //correggere con il getid di role
 							System.out.println("\nIl ruolo di " + john.getName()+" e' stato cancellato con ruolo id: " + role.getId());
 							break;
