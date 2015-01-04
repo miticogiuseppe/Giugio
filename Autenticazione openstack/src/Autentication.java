@@ -83,7 +83,7 @@ public class Autentication
 					ServerCreate sc = Builders.server()
 					                          .name("ubuntu")
 					                          .flavor("42")
-					                          .image("8999a2af-2622-4a41-8533-c0cd220f391c")
+					                          .image("9b5c8d2e-493d-4893-9402-974374cd9895")
 					                          .build();
 		
 					Server server = os.compute().servers().boot(sc);
@@ -213,7 +213,7 @@ public class Autentication
 					System.out.println("Quale utente vuoi aggiornare? (scrivi il nome)");
 					User john = os.identity().users().getByName(console.readLine());
 					
-					System.out.println("Che operazioni vuoi fare su: " + john.getName() + "?\n1 - Cambiare l'email \n" + "\n2 - Abilita o Disabilita Utente \n" + 
+					System.out.println("\nChe operazioni vuoi fare su: " + john.getName() + "?\n\n1 - Cambiare l'email \n" + "\n2 - Abilita o Disabilita Utente \n" + 
 							"\n3 - Cambiare password (solo admin) \n" + "\n4 - Cancellare un ruolo \n" + "\n5 - Cancellare un utente \n" + 
 							 "\n0 - Esci dal programma \n");
 					
@@ -244,8 +244,13 @@ public class Autentication
 							break;
 						case 4://CANCELLARE RUOLO non funziona ricollegarci al metodo superiore (tenant)
 							Role role = os.identity().roles().getByName("pasticciere");
-							os.identity().roles().delete(role.getId()); //correggere con il getid di role
-							System.out.println("\nIl ruolo di " + john.getName()+" e' stato cancellato con ruolo id: " + role.getId());
+							if (role == null)
+								System.out.println("\nL'utente " + john.getName() +" non ricopre nessun ruolo!" );
+							else
+							{	
+								os.identity().roles().delete(role.getId()); //correggere con il getid di role
+							    System.out.println("\nIl ruolo di " + john.getName()+" e' stato cancellato con ruolo id: " + role.getId());
+							}
 							break;
 						case 5://CANCELLARE UTENTE
 							os.identity().users().delete(john.getId());
