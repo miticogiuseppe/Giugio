@@ -1,8 +1,11 @@
 //import java.util.Timer;
 //import java.util.concurrent.TimeUnit;
 import java.io.IOException;
+import java.util.List;
+
 import org.openstack4j.api.*;
 import org.openstack4j.api.exceptions.*;
+import org.openstack4j.model.compute.Flavor;
 import org.openstack4j.openstack.*;
 
 public class ProgettoOpenstack 
@@ -56,7 +59,7 @@ public class ProgettoOpenstack
 		
 		Autenticazione login = new Autenticazione(Username, Password, tenantName);
 		OSClient os = OSFactory.builder()
-	            .endpoint("http://10.0.2.15:5000/v2.0")
+	            .endpoint("http://172.16.216.214:5000/v2.0")
 	            .credentials(login.getUsername(), login.getPassword())
 	            .tenantName(login.getTenant())
 	            .authenticate();		
@@ -66,10 +69,14 @@ public class ProgettoOpenstack
 			
 			System.out.println("\nLista comandi: \n" + "\n1 - Creazione Server \n" + "\n2 - Cancellazione di tutti i Server \n" + 
 								"\n3 - Cancellazione di un solo Server \n" + "\n4 - Creazione Tenant \n" + "\n5 - Aggiornare dati utente \n" + 
-								 "\n0 - Esci dal programma \n");
+								"\n6 - Crea/Cancella Macchina(Flavor) \n" + "\n7 - Diagnostica \n"+ "\n0 - Esci dal programma \n");
 			
 			int input = console.readInt();
+			
 			GestioneServer gs = new GestioneServer();
+			GestioneUtenti gu = new GestioneUtenti();
+			GestioneFlavors gf = new GestioneFlavors();
+			Diagnostica d = new Diagnostica();
 			switch (input) 
 			{
 				case 1: //CREIAMO UN SERVER
@@ -85,14 +92,34 @@ public class ProgettoOpenstack
 				break;
 				
 				case 4: //CREAZIONE TENANT, UTENTE E ASSEGNAZIONE RUOLO
-					gs.CreazioneUtente(os);
+					gu.CreazioneUtente(os);
 				break;
 					
 				case 5: // AGGIORNARE DATI UTENTE
-					gs.AggiornaDatiUtente(os);
+					gu.AggiornaDatiUtente(os);
 			    break;
+			    
+				case 6: // CREARE/CANCELLARE FLAVOR
+					System.out.print("\nVuoi creare/cancellare una macchina? 1 - crea; 2 - cancella: ");
 					
-				case 0:
+					if(console.readInt() == 1)
+						gf.CreaFlavor(true, os);
+					else
+					{
+						System.out.print("\nQuale macchina vuoi cancellare? ");
+						List<? extends Flavor> flavors = os.compute().flavors().list();
+						System.out.print("\nLista macchine: " + flavors.toString());
+						System.out.print("\nInserisci l'id della macchina scelta: ");
+						String flavorId = console.readLine();
+						gf.CancellaFlavor(flavorId, os);
+					}
+			    break;
+			    
+				case 7: // DIAGNOSTICA
+					d.Analizza(os);
+			    break;
+			    
+				case 0://USCIRE DAL PROGRAMMA
 					ciclo = false;
 				break;
 			}
