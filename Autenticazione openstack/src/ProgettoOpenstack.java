@@ -40,6 +40,7 @@ public class ProgettoOpenstack
 		double startTime = System.currentTimeMillis();
 		 
 		System.out.println("Il programma ha iniziato");
+		System.out.println("");
 		
 		/*se si desidera utilizzare la nuova versione e non si desidera modificare la installazione con gli host corretto è 
 		possibile utilizzare la seguente istruzione prima di creare / autenticare un client*/
