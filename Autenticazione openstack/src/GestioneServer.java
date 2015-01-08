@@ -30,7 +30,7 @@ public class GestioneServer extends ComputeNova
 		System.out.print("\nnome del server:  \n" + props.getString("nomeServer"));
 		//String nome = console.readLine();
 		
-		System.out.print("\nQuale immagine vuoi usare? \n");
+	    System.out.print("\nQuale immagine vuoi usare? \n");
 		
 		System.out.println("\n" + os.compute().images().list(false).toString() + "\n");
 		

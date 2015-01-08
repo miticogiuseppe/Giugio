@@ -9,14 +9,13 @@ public class ConfigurationProperties
 	  //CERCARE DI RENDERE IL PATH ASSOLUTO INDIPENDENTEMENTE DALLA MACCHINA SU CUI ANDRÀ A GIRARE
       //FILE PROPERTIES
       private static String fileProperties="/home/giovannidipasquale/git/Giugio/Autenticazione openstack/src/config.properties";
-    
       public ConfigurationProperties()
       {
         
       }
       
       //RECUPERA LA PROPERTY RICHIESTA
-      public synchronized String getString(String pKey) 
+      public String getString(String pKey) 
       {
           String myReturn="";
           Properties props = new Properties();
@@ -34,7 +33,7 @@ public class ConfigurationProperties
       }
       
      //QUESTO METODO PERMETTE DI SCRIVERE UN VALORE NEL FILE CONFIG.PROPERTIES
-      public synchronized void  setProperty(String pKey, String pValue)  
+      public void setProperty(String pKey, String pValue)  
       {
           Properties properties = new Properties();
           try 
