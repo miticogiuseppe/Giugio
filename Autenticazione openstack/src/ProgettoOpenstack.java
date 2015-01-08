@@ -60,7 +60,7 @@ public class ProgettoOpenstack
 		
 		Autenticazione login = new Autenticazione(Username, Password, tenantName);
 		OSClient os = OSFactory.builder()
-	            .endpoint("http://172.16.216.214:5000/v2.0")
+	            .endpoint("http://10.0.2.15:5000/v2.0") //Giuseppe "http://10.0.2.15:5000/v2.0", Giovanni "http://172.16.216.214:5000/v2.0"
 	            .credentials(login.getUsername(), login.getPassword())
 	            .tenantName(login.getTenant())
 	            .authenticate();		

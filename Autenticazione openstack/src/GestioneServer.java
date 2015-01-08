@@ -22,7 +22,7 @@ public class GestioneServer extends ComputeNova
 		ServerCreate sc = Builders.server()
 	            .name("ubuntu")
 	            .flavor(gf.CreaFlavor(os).getId())
-	            .image("ac55ac3f-afa0-44ea-894a-1f8703449fdd")
+	            .image("9b5c8d2e-493d-4893-9402-974374cd9895") //Giupino "9b5c8d2e-493d-4893-9402-974374cd9895"
 	            .build();
 
 	    Server server = os.compute().servers().boot(sc);
