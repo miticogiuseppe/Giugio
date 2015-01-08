@@ -6,31 +6,24 @@ import org.openstack4j.model.compute.Flavor;
 import org.openstack4j.openstack.*;
 
 public class ProgettoOpenstack 
-{		
+{	
 	public static void main(String[] args) throws ClientResponseException, ServerResponseException, InterruptedException, IOException, NumberFormatException
 	{
+		//FILE CONFIGURAZIONE
+		ConfigurationProperties props = new ConfigurationProperties();
+		
 		boolean ciclo = true;
 		ConsoleReader console = new ConsoleReader();
 		double startTime = System.currentTimeMillis();
-		 
-		System.out.println("Il programma ha iniziato");
-		System.out.println("");
 		
 		/*se si desidera utilizzare la nuova versione e non si desidera modificare la installazione con gli host corretto è 
 		possibile utilizzare la seguente istruzione prima di creare / autenticare un client*/
 		OSFactory.enableLegacyEndpointHandling(true);
 		
 		//AUTENTICAZIONE
-	    System.out.print("\nInserisci Username: ");
-		String Username = console.readLine();
-		System.out.println();		
-	    System.out.print("Inserisci Password: ");
-		String Password = console.readLine();
-		System.out.println();
-		
-		System.out.print("Inserisci tenantName: ");
-		String tenantName = console.readLine();
-		System.out.println();
+		String Username = props.getString("Username");
+		String Password = props.getString("Password");
+		String tenantName = props.getString("tenantName");
 		
 		Autenticazione login = new Autenticazione(Username, Password, tenantName);
 		OSClient os = OSFactory.builder()
