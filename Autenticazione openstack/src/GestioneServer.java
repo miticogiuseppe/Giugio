@@ -146,7 +146,7 @@ public class GestioneServer extends ComputeNova
 				
 				System.out.println();
 				int operazione = console.readInt();
-				//EVITARE CONFLITTI DI OPERAZIONI
+				
 				switch (operazione) 
 				{
 					case 1:
