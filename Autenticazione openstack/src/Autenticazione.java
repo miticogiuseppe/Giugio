@@ -1,7 +1,10 @@
+import java.net.InetAddress;
+
 public class Autenticazione {
 private String username;
 private String password;
 private String tenant;
+private String host;
 
 public Autenticazione() {
 	
@@ -53,5 +56,28 @@ public String getTenant() {
  */
 public void setTenant(String tenant) {
 	this.tenant = tenant;
+}
+
+public String authURL(String path) 
+{
+    return String.format("http://%s:5000%s", getHost(), path);
+}
+
+public String getHost() 
+{
+    try
+    {
+    	host="";
+        if (host == null)
+            host = InetAddress.getLocalHost().getHostAddress();
+    }
+    catch (Exception e) 
+    {
+        e.printStackTrace();
+    }
+    if (host == null)
+        return "127.0.0.1";
+    
+    return host;
 }
 }
