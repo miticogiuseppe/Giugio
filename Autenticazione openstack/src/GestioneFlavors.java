@@ -19,16 +19,16 @@ public class GestioneFlavors
 		scelta = console.readInt();
 		if(scelta == 1)
 		{
-			System.out.print("\nChe nome vuoi assegnare alla macchina? ");
+			System.out.print("\nChe nome vuoi assegnare alla macchina? (flavor) ");
 			String n = console.readLine();
 			
-			System.out.print("\nQuante ram vuoi assegnare alla macchina? ");
+			System.out.print("\nQuante ram vuoi assegnare alla macchina? (flavor) ");
 			int r = console.readInt();
 			
-			System.out.print("\nQuante vcpu vuoi assegnare alla macchina? ");
+			System.out.print("\nQuante vcpu vuoi assegnare alla macchina? (flavor) ");
 			int vc = console.readInt();
 			
-			System.out.print("\nQuanto spazio (GB) vuoi assegnare alla macchina? ");
+			System.out.print("\nQuanto spazio (GB) vuoi assegnare alla macchina? (flavor) ");
 			int d = console.readInt();
 			
 			Flavor flavor = Builders.flavor()

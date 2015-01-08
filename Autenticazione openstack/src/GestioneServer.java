@@ -22,10 +22,22 @@ public class GestioneServer extends ComputeNova
 	public void CreazioneServer(OSClient os) throws NumberFormatException, IOException, InterruptedException 
 	{
 		GestioneFlavors gf = new GestioneFlavors();
+		
+		System.out.print("\nChe nome vuoi dare al server? \n");
+		String nome = console.readLine();
+		
+		System.out.print("\nQuale immagine vuoi usare? \n");
+		
+		System.out.println("\n" + os.compute().images().list(false).toString() + "\n");
+		
+		System.out.println("\nQuale immagine (iso) vuoi usare? \n");
+		
+		String imageId = console.readLine();
+		
 		ServerCreate sc = Builders.server()
-	            .name("ubuntu")
+	            .name(nome)
 	            .flavor(gf.CreaFlavor(os).getId())
-	            .image("ac55ac3f-afa0-44ea-894a-1f8703449fdd")
+	            .image(imageId)
 	            .build();
 
 	    server = os.compute().servers().boot(sc);
@@ -33,7 +45,7 @@ public class GestioneServer extends ComputeNova
 	    String id = server.getId();
 	    System.out.println("\nIl server è stato creato con id = " + id);
 
-	    Thread.sleep(15000);
+	    Thread.sleep(10000);
 	    
 		System.out.println("\nVuoi cancellare il server? \n 1 - si ; 0 - no");
 		int cancella = console.readInt();
@@ -66,7 +78,7 @@ public class GestioneServer extends ComputeNova
 	    else 
 	    	System.out.println("\nServer Cancellati");
 	    
-	    Thread.sleep(15000);
+	    Thread.sleep(10000);
 	}
 	
 	//CANCELLA UN SOLO SERVER
@@ -95,7 +107,7 @@ public class GestioneServer extends ComputeNova
 		    if (x>=0 && x<idServer1.length)
 		    {
 		    	os.compute().servers().delete(idServer1[x]);
-		    	Thread.sleep(15000);
+		    	Thread.sleep(10000);
 		    	System.out.println("\nIl server con id = " + idServer1[x] + " è stato cancellato");
 		    }
 		    else
@@ -151,55 +163,55 @@ public class GestioneServer extends ComputeNova
 				{
 					case 1:
 						os.compute().servers().action(x, Action.PAUSE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 2:
 						os.compute().servers().action(x, Action.UNPAUSE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 3:
 						os.compute().servers().action(x, Action.STOP);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 4:
 						os.compute().servers().action(x, Action.START);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 5:
 						os.compute().servers().action(x, Action.LOCK);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 6:
 						os.compute().servers().action(x, Action.UNLOCK);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 7:
 						os.compute().servers().action(x, Action.SUSPEND);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 8:
 						os.compute().servers().action(x, Action.RESUME);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 9:
 						os.compute().servers().action(x, Action.RESCUE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 10:
 						os.compute().servers().action(x, Action.UNRESCUE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 11:
 						os.compute().servers().action(x, Action.SHELVE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 12:
 						os.compute().servers().action(x, Action.SHELVE_OFFLOAD);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 13:
 						os.compute().servers().action(x, Action.UNSHELVE);
-						Thread.sleep(15000);
+						Thread.sleep(10000);
 					break;
 					case 0:	
 					break;

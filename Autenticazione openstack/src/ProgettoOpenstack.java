@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.List;
-
 import org.openstack4j.api.*;
 import org.openstack4j.api.exceptions.*;
 import org.openstack4j.model.compute.Flavor;
@@ -55,27 +54,27 @@ public class ProgettoOpenstack
 			Diagnostica d = new Diagnostica();
 			switch (input) 
 			{
-				case 1: //CREIAMO UN SERVER
+				case 1://CREIAMO UN SERVER
 					gs.CreazioneServer(os);
 				break;
 				
-				case 2: //CANCELLIAMO TUTTI I SERVER
+				case 2://CANCELLIAMO TUTTI I SERVER
 					gs.CancellaTutti(os);
 				break;
 				    
-				case 3: //CANCELLA UN SOLO SERVER
+				case 3://CANCELLA UN SOLO SERVER
 					gs.CancellaUnServer(os);
 				break;
 				
-				case 4: //CREAZIONE TENANT, UTENTE E ASSEGNAZIONE RUOLO
+				case 4://CREAZIONE TENANT, UTENTE E ASSEGNAZIONE RUOLO
 					gu.CreazioneUtente(os);
 				break;
 					
-				case 5: // AGGIORNARE DATI UTENTE
+				case 5://AGGIORNARE DATI UTENTE
 					gu.AggiornaDatiUtente(os);
 			    break;
 			    
-				case 6: // CREARE/CANCELLARE FLAVOR
+				case 6://CREARE/CANCELLARE FLAVOR
 					System.out.print("\nVuoi creare/cancellare una macchina? 1 - crea; 2 - cancella: ");
 					
 					if(console.readInt() == 1)
@@ -91,11 +90,11 @@ public class ProgettoOpenstack
 					}
 			    break;
 			    
-				case 7: // DIAGNOSTICA
+				case 7://DIAGNOSTICA
 					d.Analizza(os);
 			    break;
 			    
-				case 8:	//OPERAZIONE SERVER
+				case 8://OPERAZIONE SERVER
 					gs.OperazioniServer(os);
 				break;
 			    

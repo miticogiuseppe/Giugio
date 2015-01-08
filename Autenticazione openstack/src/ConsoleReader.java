@@ -18,7 +18,8 @@ public class ConsoleReader
 		  }
 		  catch(IOException e)
 		  { 
-			  System.out.println(e);
+			  System.out.println("\nDevi inserire una stringa alfanumerica");
+			  System.out.println("\nProgramma Terminato");
 			  System.exit(1);
 		  }
 		  return inputLine;
@@ -43,8 +44,19 @@ public class ConsoleReader
 	
 	  public double readDouble () throws NumberFormatException, IOException
 	  { 
-		  String inputString = readLine();
-		  double x = Double.parseDouble(inputString);
+		  double x = 0;
+		  try
+		  {
+			  String inputString = readLine();
+			  x = Double.parseDouble(inputString);
+			  
+		  }
+		  catch(NumberFormatException e)
+		  {
+				System.out.println("\nDevi inserire un valore decimale");
+				System.out.println("\nProgramma Terminato");
+				System.exit(1);
+		  }
 		  return x;
 	  }  
 }
