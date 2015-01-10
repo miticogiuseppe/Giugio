@@ -1,5 +1,3 @@
-//import java.util.Timer;
-//import java.util.concurrent.TimeUnit;
 import java.io.IOException;
 import java.util.List;
 
@@ -9,30 +7,7 @@ import org.openstack4j.model.compute.Flavor;
 import org.openstack4j.openstack.*;
 
 public class ProgettoOpenstack 
-{
-	
-	// ESEGUE QUALCOSA MENTRE IL SERVER VIENE ATTIVATO
-	/*public static Server waitUntilServerActive(OSClient os, Server server) throws ClientResponseException, ServerResponseException, InterruptedException 
-	{
-	    String serverId = server.getId();
-	    boolean serverIsReady = false;
-	    Server server2 = null;
-
-	    while ( !serverIsReady ) {
-	        server2 = os.compute().servers().get(serverId);
-
-	        if ( server2.getStatus().toString().equals("ACTIVE") ) {
-	            // The server is now ACTIVE
-	            serverIsReady = true;               
-	        }
-
-	        // Wait a little bit, to avoid sending too many petitions away continuoulsy
-	        TimeUnit.SECONDS.sleep(15);
-	    }
-
-	    return server2;
-	}*/
-	
+{		
 	public static void main(String[] args) throws ClientResponseException, ServerResponseException, InterruptedException, IOException, NumberFormatException
 	{
 		boolean ciclo = true;
@@ -60,7 +35,7 @@ public class ProgettoOpenstack
 		
 		Autenticazione login = new Autenticazione(Username, Password, tenantName);
 		OSClient os = OSFactory.builder()
-	            .endpoint("http://10.0.2.15:5000/v2.0") //Giuseppe "http://10.0.2.15:5000/v2.0", Giovanni "http://172.16.216.214:5000/v2.0"
+				.endpoint(login.authURL("/v2.0"))
 	            .credentials(login.getUsername(), login.getPassword())
 	            .tenantName(login.getTenant())
 	            .authenticate();		
@@ -70,7 +45,7 @@ public class ProgettoOpenstack
 			
 			System.out.println("\nLista comandi: \n" + "\n1 - Creazione Server \n" + "\n2 - Cancellazione di tutti i Server \n" + 
 								"\n3 - Cancellazione di un solo Server \n" + "\n4 - Creazione Tenant \n" + "\n5 - Aggiornare dati utente \n" + 
-								"\n6 - Crea/Cancella Macchina(Flavor) \n" + "\n7 - Diagnostica \n"+ "\n0 - Esci dal programma \n");
+								"\n6 - Crea/Cancella Macchina(Flavor) \n" + "\n7 - Diagnostica \n"+ "\n8 - Operazioni Server\n" +"\n0 - Esci dal programma \n");
 			
 			int input = console.readInt();
 			
@@ -119,6 +94,10 @@ public class ProgettoOpenstack
 				case 7: // DIAGNOSTICA
 					d.Analizza(os);
 			    break;
+			    
+				case 8:	//OPERAZIONE SERVER
+					gs.OperazioniServer(os);
+				break;
 			    
 				case 0://USCIRE DAL PROGRAMMA
 					ciclo = false;

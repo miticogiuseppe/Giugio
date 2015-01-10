@@ -15,7 +15,6 @@ public class Diagnostica
 	
 	public void Analizza(OSClient os)
 	{
-		System.out.println("mi dà la nullpointer si deve sistemare, polletto!");
 		String consoleOutput = os.compute().servers().getConsoleOutput("b6ad71df-cdd1-4753-8067-8155d8c111dc", 50);
 		System.out.println("\nL'output della console è il seguente: \n" + consoleOutput);
 	
