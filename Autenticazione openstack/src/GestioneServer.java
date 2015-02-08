@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.openstack4j.api.Builders;
 import org.openstack4j.api.OSClient;
 import org.openstack4j.model.compute.Action;
@@ -12,6 +13,8 @@ public class GestioneServer extends ComputeNova
 {
 	private Server server;
 	ConsoleReader console = new ConsoleReader();
+	//FILE CONFIGURAZIONE
+	ConfigurationProperties props = new ConfigurationProperties();
 	//COSTRUTTORE
 	public GestioneServer() 
 	{
@@ -23,10 +26,11 @@ public class GestioneServer extends ComputeNova
 	{
 		GestioneFlavors gf = new GestioneFlavors();
 		
-		System.out.print("\nChe nome vuoi dare al server? \n");
-		String nome = console.readLine();
+		//System.out.print("\nChe nome vuoi dare al server? \n");
+		System.out.print("\nnome del server:  \n" + props.getString("nomeServer"));
+		//String nome = console.readLine();
 		
-		System.out.print("\nQuale immagine vuoi usare? \n");
+	    System.out.print("\nQuale immagine vuoi usare? \n");
 		
 		System.out.println("\n" + os.compute().images().list().toString() + "\n");
 		
@@ -35,7 +39,7 @@ public class GestioneServer extends ComputeNova
 		String imageId = console.readLine();
 		
 		ServerCreate sc = Builders.server()
-	            .name(nome)
+	            .name(props.getString("nomeServer"))
 	            .flavor(gf.CreaFlavor(os).getId())
 	            .image(imageId)
 	            .build();
