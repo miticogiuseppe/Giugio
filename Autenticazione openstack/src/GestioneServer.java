@@ -28,7 +28,7 @@ public class GestioneServer extends ComputeNova
 		
 		System.out.print("\nQuale immagine vuoi usare? \n");
 		
-		System.out.println("\n" + os.compute().images().list(false).toString() + "\n");
+		System.out.println("\n" + os.compute().images().list().toString() + "\n");
 		
 		System.out.println("\nQuale immagine (iso) vuoi usare? \n");
 		
@@ -141,7 +141,7 @@ public class GestioneServer extends ComputeNova
 		    
 		    String x = console.readLine();
 
-				System.out.print("\n1 - PAUSE	Metti in pausa il server" 
+				System.out.print( "\n1 - PAUSE	Metti in pausa il server" 
 								+ "\n2 - UNPAUSE	Togli il server dalla pausa"  
 								+ "\n3 - STOP	Ferma il server" 
 								+ "\n4 - START	Avvia il server"
