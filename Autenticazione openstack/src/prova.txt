@@ -1,0 +1,480 @@
+          indirizzo inet6: fe80::fc16:3eff:fea9:1396/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:110 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:269 errors:0 dropped:0 overruns:0 carrier:0
+          collisioni:0 txqueuelen:500 
+          Byte RX:26058 (26.0 KB)  Byte TX:66971 (66.9 KB)
+
+giovannidipasquale@ubuntu:~/devstack$ ssh cirros@10.0.0.8
+The authenticity of host '10.0.0.8 (10.0.0.8)' can't be established.
+RSA key fingerprint is 88:69:28:b0:ce:17:d1:04:48:a2:22:9c:84:3c:26:72.
+Are you sure you want to continue connecting (yes/no)? y
+Please type 'yes' or 'no': yes
+Warning: Permanently added '10.0.0.8' (RSA) to the list of known hosts.
+cirros@10.0.0.8's password: 
+$ ls
+file.txt
+$ cd /
+$ ls
+bin         etc         init        linuxrc     media       old-root    proc        run         sys         usr
+dev         home        lib         lost+found  mnt         opt         root        sbin        tmp         var
+$ cd etc/
+$ ls
+TZ             cirros         fstab          init.d         ld.so.conf     mtab           profile        resolv.conf    shadow
+acpi           cirros-init    group          inittab        ld.so.conf.d   network        protocols      screenrc       ssl
+blkid.tab      default        hostname       inputrc        mke2fs.conf    os-release     random-seed    securetty      sudoers
+blkid.tab.old  dropbear       hosts          issue          modules        passwd         rc3.d          services       sudoers.d
+$ cd init.d/
+$ ls
+S01logging            acpid                 cirros-ds-local       load-modules          rcS
+S20urandom            cirros-apply-local    cirros-ds-net         logo                  resizefs
+S40network            cirros-apply-net      cirros-status         rc.sysinit            sshd
+S50dropbear           cirros-check-version  cirros-userdata       rcK
+$ cat rc.sysinit 
+#!/bin/sh
+# vi: ts=4 noexpandtab
+
+. /lib/cirros/shlib
+
+write_lxc_is_container() {
+	cat <<"EOF"
+#!/bin/sh
+# This program is written by /etc/rc.d/rc.sysinit.
+# It simply reports whether or not this system is in an lxc container
+
+EOF
+	if is_lxc; then
+		echo "# This is an LXC container"
+		echo '[ "$1" = "-v" ] && echo '"$_LXC_CONTAINER"
+		echo "exit 0"
+	else
+		echo "# This is NOT an LXC container"
+		echo '[ "$1" = "-v" ] && echo none'
+		echo "exit 1"
+	fi
+}
+
+fail() { echo "FAIL:" "$@"; }
+warn() { echo "WARN:" "$@"; }
+
+### begin init ###
+
+if [ ! -d /proc/1 ]; then
+	mount -n -t proc /proc /proc || fail "failed mount /proc"
+fi
+
+read uptime cputime < /proc/uptime
+iinfo "$0: up at $uptime"
+
+if (: >/.testrw; ) >/dev/null 2>&1; then
+	rm -f /.testrw
+else
+	mount -o remount,rw / || fail "failed mount / rw"
+fi
+
+is_mounted sysfs "" /sys ||
+	mount -t sysfs sysfs /sys || fail "failed mount /sys!"
+
+if ! is_lxc; then
+	mount_once devtmpfs /dev /dev || fail "failed mount /dev"
+fi
+iinfo "container: $_LXC_CONTAINER"
+
+mkdir -p /dev/pts /dev/shm /run
+
+mount -a
+
+mkdir /run/var.tmp
+
+hostname -F /etc/hostname
+
+f="/bin/lxc-is-container" && write_lxc_is_container > "$f" && chmod 755 "$f"
+
+if ! is_lxc; then
+	for d in $(awk '$2 == "/" { print $1 }' /proc/mounts); do
+		[ -e "/dev/${d#/dev}" ] && ln -sf "${d#/dev/}" /dev/root && break
+	done
+fi
+
+## pretend you're runlevel 3
+set +f
+for s in /etc/rc3.d/S*; do
+	[ -x "$s" ] || continue
+	"$s" "start" </dev/null || warn "$s failed"
+done
+set -f
+
+if is_lxc; then
+	grep -q "^pts/0$" /etc/securetty || echo "pts/0" >> /etc/securetty
+	if ! [ /dev/tty1 -ef /dev/console ]; then
+		# on libvirt lxc, /dev/console is a symlink to /dev/pts0
+		# and /dev/tty1 is also a symlink to /dev/pts/0. So using
+		# the tty1 gets us a getty on "console"
+		#
+		# on upstream lxc, /dev/console is a character device
+		# so we run a getty there if so.
+		lxc_console="console"
+	fi
+fi
+
+s_args=""
+for tty in $lxc_console tty1 ttyS0 hvc0; do
+	if [ -e /dev/$tty ] && { echo "" >> "/dev/$tty" ; } 2>/dev/null ; then
+		s_args="${s_args:+${s_args} }s/^#$tty:\(.*\)/$tty:\1/;"
+	else
+		s_args="${s_args:+${s_args} }s/^$tty:\(.*\)/#$tty:\1/;"
+	fi
+done
+[ -z "$s_args" ] ||
+	{ sed -i "$s_args" /etc/inittab && kill -HUP 1; }
+
+if [ -f /etc/rc.local -a -x /etc/rc.local ]; then
+	/etc/rc.local
+fi
+$ ls
+S01logging            acpid                 cirros-ds-local       load-modules          rcS
+S20urandom            cirros-apply-local    cirros-ds-net         logo                  resizefs
+S40network            cirros-apply-net      cirros-status         rc.sysinit            sshd
+S50dropbear           cirros-check-version  cirros-userdata       rcK
+$ 
+$ cat rc.sysinit 
+#!/bin/sh
+# vi: ts=4 noexpandtab
+
+. /lib/cirros/shlib
+
+write_lxc_is_container() {
+	cat <<"EOF"
+#!/bin/sh
+# This program is written by /etc/rc.d/rc.sysinit.
+# It simply reports whether or not this system is in an lxc container
+
+EOF
+	if is_lxc; then
+		echo "# This is an LXC container"
+		echo '[ "$1" = "-v" ] && echo '"$_LXC_CONTAINER"
+		echo "exit 0"
+	else
+		echo "# This is NOT an LXC container"
+		echo '[ "$1" = "-v" ] && echo none'
+		echo "exit 1"
+	fi
+}
+
+fail() { echo "FAIL:" "$@"; }
+warn() { echo "WARN:" "$@"; }
+
+### begin init ###
+
+if [ ! -d /proc/1 ]; then
+	mount -n -t proc /proc /proc || fail "failed mount /proc"
+fi
+
+read uptime cputime < /proc/uptime
+iinfo "$0: up at $uptime"
+
+if (: >/.testrw; ) >/dev/null 2>&1; then
+	rm -f /.testrw
+else
+	mount -o remount,rw / || fail "failed mount / rw"
+fi
+
+is_mounted sysfs "" /sys ||
+	mount -t sysfs sysfs /sys || fail "failed mount /sys!"
+
+if ! is_lxc; then
+	mount_once devtmpfs /dev /dev || fail "failed mount /dev"
+fi
+iinfo "container: $_LXC_CONTAINER"
+
+mkdir -p /dev/pts /dev/shm /run
+
+mount -a
+
+mkdir /run/var.tmp
+
+hostname -F /etc/hostname
+
+f="/bin/lxc-is-container" && write_lxc_is_container > "$f" && chmod 755 "$f"
+
+if ! is_lxc; then
+	for d in $(awk '$2 == "/" { print $1 }' /proc/mounts); do
+		[ -e "/dev/${d#/dev}" ] && ln -sf "${d#/dev/}" /dev/root && break
+	done
+fi
+
+## pretend you're runlevel 3
+set +f
+for s in /etc/rc3.d/S*; do
+	[ -x "$s" ] || continue
+	"$s" "start" </dev/null || warn "$s failed"
+done
+set -f
+
+if is_lxc; then
+	grep -q "^pts/0$" /etc/securetty || echo "pts/0" >> /etc/securetty
+	if ! [ /dev/tty1 -ef /dev/console ]; then
+		# on libvirt lxc, /dev/console is a symlink to /dev/pts0
+		# and /dev/tty1 is also a symlink to /dev/pts/0. So using
+		# the tty1 gets us a getty on "console"
+#!/bin/sh
+ 
+touch /home/
+~
+~
+~
+~
+~
+~
+#!/bin/sh
+ 
+touch /home/cirros/itworks.txt
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+$ cat rc.local 
+#!/bin/sh
+
+touch /home/cirros/itworks.txt
+$ ls
+rc.local
+$ chmod 777 rc.local 
+$ ls
+rc.local
+$ ls
+rc.local
+$ cd ..
+$ ls
+bin         etc         init        linuxrc     media       old-root    proc        run         sys         usr
+dev         home        lib         lost+found  mnt         opt         root        sbin        tmp         var
+$ mv r
+root/  run/
+$ mv root/
+.ash_history   .bash_history  .bash_logout   .bash_profile  rc.local
+$ ls /bin/
+addgroup          cirros-query      false             iprule            mknod             ps                su
+adduser           cp                fdflush           iptunnel          mktemp            pwd               sync
+ash               cpio              fgrep             kill              more              reformime         tar
+base64            date              getopt            linux32           mount             rm                touch
+bbconfig          dd                grep              linux64           mountpoint        rmdir             true
+busybox           delgroup          growroot          ln                mt                run-parts         umount
+cat               deluser           gunzip            login             mv                sed               uname
+catv              df                gzip              ls                netstat           setarch           usleep
+chattr            dmesg             hostname          lsattr            nice              setserial         vi
+chgrp             dnsdomainname     ip                lsblk             pidof             sh                watch
+chmod             dumpkmap          ipaddr            lxc-is-container  ping              sleep             zcat
+chown             echo              iplink            makemime          pipe_progress     stat
+cirros-per        egrep             iproute           mkdir             printenv          stty
+$ ls
+bin         etc         init        linuxrc     media       old-root    proc        run         sys         usr
+dev         home        lib         lost+found  mnt         opt         root        sbin        tmp         var
+$ ls
+bin         etc         init        linuxrc     media       old-root    proc        run         sys         usr
+dev         home        lib         lost+found  mnt         opt         root        sbin        tmp         var
+$ mv root/rc.local ./
+$ ls
+bin         etc         init        linuxrc     media       old-root    proc        root        sbin        tmp         var
+dev         home        lib         lost+found  mnt         opt         rc.local    run         sys         usr
+$ cd etc/
+$ ls
+TZ             cirros         fstab          init.d         ld.so.conf     mtab           profile        resolv.conf    shadow
+acpi           cirros-init    group          inittab        ld.so.conf.d   network        protocols      screenrc       ssl
+blkid.tab      default        hostname       inputrc        mke2fs.conf    os-release     random-seed    securetty      sudoers
+blkid.tab.old  dropbear       hosts          issue          modules        passwd         rc3.d          services       sudoers.d
+$ cd init.d/
+$ ls
+S01logging            acpid                 cirros-ds-local       load-modules          rcS
+S20urandom            cirros-apply-local    cirros-ds-net         logo                  resizefs
+S40network            cirros-apply-net      cirros-status         rc.sysinit            sshd
+S50dropbear           cirros-check-version  cirros-userdata       rcK
+$ cat rc.sysinit 
+#!/bin/sh
+# vi: ts=4 noexpandtab
+
+. /lib/cirros/shlib
+
+write_lxc_is_container() {
+	cat <<"EOF"
+#!/bin/sh
+# This program is written by /etc/rc.d/rc.sysinit.
+# It simply reports whether or not this system is in an lxc container
+
+EOF
+	if is_lxc; then
+		echo "# This is an LXC container"
+		echo '[ "$1" = "-v" ] && echo '"$_LXC_CONTAINER"
+		echo "exit 0"
+	else
+		echo "# This is NOT an LXC container"
+		echo '[ "$1" = "-v" ] && echo none'
+		echo "exit 1"
+	fi
+}
+
+fail() { echo "FAIL:" "$@"; }
+warn() { echo "WARN:" "$@"; }
+
+### begin init ###
+
+if [ ! -d /proc/1 ]; then
+	mount -n -t proc /proc /proc || fail "failed mount /proc"
+fi
+
+read uptime cputime < /proc/uptime
+iinfo "$0: up at $uptime"
+
+if (: >/.testrw; ) >/dev/null 2>&1; then
+	rm -f /.testrw
+else
+	mount -o remount,rw / || fail "failed mount / rw"
+fi
+
+is_mounted sysfs "" /sys ||
+	mount -t sysfs sysfs /sys || fail "failed mount /sys!"
+
+if ! is_lxc; then
+	mount_once devtmpfs /dev /dev || fail "failed mount /dev"
+fi
+iinfo "container: $_LXC_CONTAINER"
+
+mkdir -p /dev/pts /dev/shm /run
+
+mount -a
+
+mkdir /run/var.tmp
+
+hostname -F /etc/hostname
+
+f="/bin/lxc-is-container" && write_lxc_is_container > "$f" && chmod 755 "$f"
+
+if ! is_lxc; then
+	for d in $(awk '$2 == "/" { print $1 }' /proc/mounts); do
+		[ -e "/dev/${d#/dev}" ] && ln -sf "${d#/dev/}" /dev/root && break
+	done
+fi
+
+## pretend you're runlevel 3
+set +f
+for s in /etc/rc3.d/S*; do
+	[ -x "$s" ] || continue
+	"$s" "start" </dev/null || warn "$s failed"
+done
+set -f
+
+if is_lxc; then
+	grep -q "^pts/0$" /etc/securetty || echo "pts/0" >> /etc/securetty
+	if ! [ /dev/tty1 -ef /dev/console ]; then
+		# on libvirt lxc, /dev/console is a symlink to /dev/pts0
+		# and /dev/tty1 is also a symlink to /dev/pts/0. So using
+		# the tty1 gets us a getty on "console"
+		#
+		# on upstream lxc, /dev/console is a character device
+		# so we run a getty there if so.
+		lxc_console="console"
+	fi
+fi
+
+s_args=""
+for tty in $lxc_console tty1 ttyS0 hvc0; do
+	if [ -e /dev/$tty ] && { echo "" >> "/dev/$tty" ; } 2>/dev/null ; then
+		s_args="${s_args:+${s_args} }s/^#$tty:\(.*\)/$tty:\1/;"
+	else
+		s_args="${s_args:+${s_args} }s/^$tty:\(.*\)/#$tty:\1/;"
+	fi
+done
+[ -z "$s_args" ] ||
+	{ sed -i "$s_args" /etc/inittab && kill -HUP 1; }
+touch bashrcWorks.txt
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+# .bash_profile
+
+export PATH=\
+/bin:\
+/sbin:\
+/usr/bin:\
+/usr/sbin:\
+/usr/bin/X11:\
+/usr/local/bin
+
+touch bash_profile_works.txt
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+#!/bin/sh
+ 
+curl .... (INDIRIZZO DA DOVE SCARICARE L'OGGETTO ) htt://172.16.216.214
+cp input.txt output.txt
+echo Ciao Mondo >> output.txt
+curl upload http/   
+exit 0
+~
+$ 
+
+(INSERIRE UN FILE IN CIRROS NEL MOMENTO IN CUI NON FUNZIONA SWIFT). CREARE LO SNAPSHOT DI CIRROS, INSERIRE UN FILE ALL'INTERNO DEL CIRROS MODIFICATO TRAMITE UNA CONNESSIONE SSH COME INDICATO SOPRA. SUCCESSIVAMENTE CREARE UN'ISTANZA DI MACCHINA VIRTUALE CON IL NUOVO CIRROS MODIFICATO CHE CONTIENE IL FILE DA ELABORARE CHE CONTERRA' LE ISTRUZIONI SCRITTE SOPRA DA ESEGUIRE. PER AVVIARE UNO SCRIPT ALL'AVVIO DI UNA MACCHINA VIRTUALE BISOGNA STOPPARE E RIAVVIARE LA MACCHINA CON IL CIRROS MODIFICATO E CON UNA CONNESSIONE SSH VERIFICARE L'ESECUZIONE DELLO SCRIPT. (IL FILE CHE VIENE AVVIATO ALL'AVVIO È RC.LOCAL)
