@@ -119,28 +119,17 @@ public class ProgettoOpenstack
 				break;
 				
 				case 10://GESTIONE FILE
-					/*System.out.println("\nQuale operazione vuoi eseguire? \n" + "\n1 - Crea Volume \n" + 
-										"\n2 - Cancella Volume \n" + "\n3 - Lista dei volumi \n");
-					int scelta = console.readInt();
-					switch(scelta)
-					{
-						case 1://CREA VOLUME
-							st.CreaVolume(os);
-						break;
-						
-						case 2://CANCELLA VOLUME
-							System.out.println("\nQuale volume vuoi cancellare? (inserisci id)\n");
-							st.ListingVolume(os);
-							String volumeId = console.readLine();
-							st.CancellaVolume(os, volumeId);
-						break;
-						
-						case 3://LISTING VOLUME
-							st.ListingVolume(os);
-						break;
-					}*/
-					fl.CreaContainer(os);
+					//LISTING ACCOUNT
+					OSFactory.enableHttpLoggingFilter(true);
+					//fl.RitornaAccount(os);
+					//LISTING CONTAINER
 					//fl.ListaContainer(os);
+					
+					fl.CreaContainer(os);
+					//fl.CancellaContainer(os);
+					//fl.CancellaOggetto(os);
+					//fl.CopiaOggetto(os);
+					//fl.downloadFile(os);
 				break;				
 				
 				case 0://USCIRE DAL PROGRAMMA

@@ -8,7 +8,7 @@ public class ConfigurationProperties
 {
 	  //CERCARE DI RENDERE IL PATH ASSOLUTO INDIPENDENTEMENTE DALLA MACCHINA SU CUI ANDRÀ A GIRARE
       //FILE PROPERTIES
-      private static String fileProperties="/home/giovannidipasquale/git/Giugio/Autenticazione openstack/src/config.properties";
+      private static String fileProperties="/home/giupino/gitRep/Autenticazione openstack/src/config.properties"; //PATH DI GIOVANNI"/home/giovannidipasquale/git/Giugio/Autenticazione openstack/src/config.properties"
       public ConfigurationProperties()
       {
         

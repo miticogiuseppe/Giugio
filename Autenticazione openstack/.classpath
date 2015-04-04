@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/home/giovannidipasquale/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19.jar"/>
-	<classpathentry kind="lib" path="/home/giovannidipasquale/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-sources.jar"/>
-	<classpathentry kind="lib" path="/home/giovannidipasquale/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-withdeps.jar"/>
-	<classpathentry kind="lib" path="/home/giovannidipasquale/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-withdeps-sources.jar"/>
+	<classpathentry kind="lib" path="/home/giupino/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19.jar"/>
+	<classpathentry kind="lib" path="/home/giupino/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-sources.jar"/>
+	<classpathentry kind="lib" path="/home/giupino/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-withdeps.jar"/>
+	<classpathentry kind="lib" path="/home/giupino/Scrivania/LIBRERIE OPENSTACK/openstack4j-2.0.1-20141219.000505-19-withdeps-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
